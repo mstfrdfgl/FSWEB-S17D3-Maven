@@ -1,23 +1,18 @@
 package com.workintech.zoo.exceptions;
 
-import lombok.Data;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 
+@Getter
+@Setter
 public class ZooException extends RuntimeException{
-    private HttpStatus status;
 
-    public ZooException(String message,HttpStatus status){
+    public HttpStatus httpStatus;
+
+    public ZooException(String message, HttpStatus httpStatus) {
         super(message);
-        this.status=status;
-    }
-
-    public HttpStatus getHttpStatus() {
-        return status;
-    }
-
-    public void setHttpStatus(HttpStatus status) {
-        this.status = status;
+        this.httpStatus = httpStatus;
     }
 }

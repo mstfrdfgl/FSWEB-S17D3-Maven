@@ -1,10 +1,11 @@
 package com.workintech.zoo.controller;
 
+
 import com.workintech.zoo.entity.Koala;
-import org.springframework.http.ResponseEntity;
+import jakarta.annotation.PostConstruct;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,32 +13,40 @@ import java.util.Map;
 @RestController
 @RequestMapping("/koalas")
 public class KoalaController {
-    private Map<Integer, Koala> koalas=new HashMap<>();
+    private Map<Long, Koala> koalas;
+
+    @PostConstruct
+    public void init() {
+        koalas= new HashMap<>();
+    }
 
     @GetMapping
-    public List<Koala> getAllKoalas(){
-        return new ArrayList<>(koalas.values());
+    public List<Koala> getKoalas() {
+        return koalas.values().stream().toList();
     }
 
     @GetMapping("/{id}")
-    public Koala getKoalaByID(@PathVariable int id){
+    public Koala getKoalas(@PathVariable long id) {
         return koalas.get(id);
     }
 
     @PostMapping
-    public ResponseEntity<Koala> addKoala(@RequestBody Koala koala){
-        koalas.put(koala.getId(),koala);
-        return ResponseEntity.ok(koala);
+    @ResponseStatus(HttpStatus.OK)
+    public Koala postKoala(@RequestBody Koala koala) {
+        koalas.put(koala.getId(), koala);
+        return koala;
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Koala> updateKoala(@PathVariable int id, @RequestBody Koala koala){
-        koalas.put(id,koala);
-        return ResponseEntity.ok(koala);
+    public Koala putKoala(@PathVariable long id, @RequestBody Koala koala) {
+        koalas.put(id, koala);
+        return koala;
     }
 
     @DeleteMapping("/{id}")
-    public void deleteKoala(@PathVariable int id){
+    public void deleteKoala(@PathVariable long id) {
         koalas.remove(id);
     }
+
+
 }
